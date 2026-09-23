@@ -92,14 +92,14 @@
 <main>
   <!-- INTRO -->
   <section class="card" id="intro">
-    <h2 style="margin:0 0 8px;font-size:1.05rem">About this quiz <span class="badge">5 cases</span></h2>
+    <h2 style="margin:0 0 8px;font-size:1.05rem">About this quiz <span class="badge">20 cases</span></h2>
     <p class="note" style="font-size:.88rem;color:var(--ink)">
-      Five classic cervical cytology pitfalls from daily screening practice.
-      One attempt per question, 30 seconds each — choose carefully.
+      Twenty cervical cytology pitfalls from daily screening practice, from atrophy
+      mimics to invasion signals. One attempt per question, 30 seconds each — choose carefully.
     </p>
     <div class="meta">
       <span class="chip">⏱ 30 sec / question</span>
-      <span class="chip">5 questions</span>
+      <span class="chip">20 questions</span>
       <span class="chip">Bethesda System, 3rd Ed (Nayar &amp; Wilbur)</span>
     </div>
     <label class="note" for="playerName" style="display:block;margin-top:14px">Your name (printed on certificate)</label>
@@ -231,6 +231,201 @@ const QUIZ = {
       explanation: "True koilocyte needs: 1. Well-defined sharp halo 2. Peripheral dense cytoplasm 3. Nuclear atypia (wrinkled, hyperchromatic). Navicular cells of pregnancy/luteal phase have yellow glycogen, ill-defined halo and bland nucleus.",
       teachingPoint: "True koilocyte = sharp halo + dense rim + wrinkled hyperchromatic nucleus.",
       wrongHint: "Look again at nuclear membrane! Bland nucleus in an ill-defined halo = pseudokoilocytosis."
+    },
+    {
+      id: 6,
+      caseLabel: "Case 6: Radiation-Induced Atypia",
+      history: "55F, 3 years post-radiotherapy for cervical cancer, follow-up smear.",
+      image: "",
+      imageDesc: "Markedly enlarged squamous cells with vacuolated cytoplasm, smudged chromatin, preserved N:C ratio",
+      question: "Diagnosis?",
+      options: ["HSIL","Radiation-associated atypia (negative)","Squamous cell carcinoma","ASC-H"],
+      correct: 1,
+      explanation: "Radiation atypia: nuclei are enlarged and hyperchromatic but smudged, not coarse; abundant vacuolated cytoplasm preserves the N:C ratio; background cells show nonspecific reactive change. HSIL/SCC would show irregular membranes, coarse chromatin and high N:C.",
+      teachingPoint: "Radiation = preserve N:C ratio + smudged chromatin. N:C ratio is your guide.",
+      wrongHint: "Look again at nuclear membrane! Smudged chromatin + preserved N:C ratio = radiation change, not HSIL."
+    },
+    {
+      id: 7,
+      caseLabel: "Case 7: The 'Repair' Trap",
+      history: "42F, IUD in situ, profuse discharge, inflamed smear.",
+      image: "",
+      imageDesc: "Flat sheet of endocervical cells with prominent nucleoli, streaming cytoplasm, preserved polarity, single-file arrangement",
+      question: "Interpretation?",
+      options: ["Endocervical adenocarcinoma","Repair (benign)","AIS","HSIL"],
+      correct: 1,
+      explanation: "Repair: monolayer sheets and streaming columns of cells with prominent macronucleoli, smooth nuclear membranes, preserved N:C ratio and polarity. Adenocarcinoma/AIS show hyperchromatic, crowded, pseudostratified nuclei with irregular membranes and loss of polarity.",
+      teachingPoint: "Nucleoli alone are NOT malignancy — repair has them too. Look at membrane and polarity.",
+      wrongHint: "Look again at nuclear membrane! Smooth membranes + preserved polarity = repair, not adenocarcinoma."
+    },
+    {
+      id: 8,
+      caseLabel: "Case 8: Benign Shedding",
+      history: "43F, day 5 of menses, routine smear.",
+      image: "",
+      imageDesc: "Small loose clusters of endometrial cells with scant cytoplasm, intact cell borders, background blood",
+      question: "Correct reporting?",
+      options: ["AGC","Endometrial adenocarcinoma","Negative — benign endometrial cells (menstrual shedding)","HSIL"],
+      correct: 2,
+      explanation: "Small clusters of endometrial cells during menses (days 1–10) are physiologic shedding and reported as negative. Endometrial cells are separately reported (not AGC) when shed in women ≥45 years or in the appropriate phase, and raise concern only with postmenopausal or abnormal bleeding.",
+      teachingPoint: "Menstrual-phase endometrial cells are benign; report separately by age, don't reflexively call AGC.",
+      wrongHint: "Look again at nuclear membrane! Bland small uniform nuclei in blood = physiologic shedding, not AGC."
+    },
+    {
+      id: 9,
+      caseLabel: "Case 9: Ciliated Mimic of AIS",
+      history: "38F, HPV negative ×3 years, endocervical component normal.",
+      image: "",
+      imageDesc: "Glandular cluster with cilia and terminal bars, pseudostratified nuclei, no hyperchromasia",
+      question: "Diagnosis?",
+      options: ["AIS","Atypical endocervical cells, favor neoplastic","Tubal (ciliated) metaplasia — negative","Reactive endocervical cells"],
+      correct: 2,
+      explanation: "Tubal metaplasia: cilia with terminal bars and occasional pseudostratification. Unlike AIS, nuclei are bland, vesicular and uniform without elongation, hyperchromasia, mitoses or feathering. AIS does not show cilia.",
+      teachingPoint: "Cilia + terminal bars = tubal metaplasia, never AIS. Missing cilia lets you sleep at night.",
+      wrongHint: "Look again at nuclear membrane! Cilia and terminal bars are a benign hallmark — nuclei are bland."
+    },
+    {
+      id: 10,
+      caseLabel: "Case 10: Viral Cytopathic Effect",
+      history: "26F, renal transplant on immunosuppression, ulcerative cervicitis.",
+      image: "",
+      imageDesc: "Multinucleated giant cell with nuclear molding, ground-glass nuclei, marginated chromatin",
+      question: "Diagnosis?",
+      options: ["HSIL","Herpes simplex cytopathic effect","Keratinizing carcinoma","Multinucleated metaplastic cell"],
+      correct: 1,
+      explanation: "HSV: multinucleated cells with nuclear molding, ground-glass chromatin and peripheral margination of chromatin ('conversion to glass'), plus eosinophilic intranuclear inclusions. HSIL multinucleation lacks molding with ground-glass change and has distinct coarse chromatin.",
+      teachingPoint: "Molding + ground-glass nuclei + chromatic margination = HSV, not HSIL.",
+      wrongHint: "Look again at nuclear membrane! Molding and ground-glass chromatin = herpes, not HSIL."
+    },
+    {
+      id: 11,
+      caseLabel: "Case 11: The Nearly Koilocyte",
+      history: "25F, HPV 16 positive; few cells with equivocal perinuclear halos.",
+      image: "",
+      imageDesc: "Scattered enlarged intermediate cells with partial halos, mild chromatin change that does not meet full koilocyte criteria",
+      question: "Best interpretation?",
+      options: ["LSIL","ASC-US","Negative","HSIL"],
+      correct: 1,
+      explanation: "If a well-defined halo lacks robust nuclear atypia, or the nuclear change is present without a convincing halo, the criteria for LSIL are not met. With a high-risk HPV history and equivocal morphology, ASC-US is correct — never force LSIL or NILM.",
+      teachingPoint: "LC: full koilocyte needs BOTH sharp halo and unequivocal nuclear atypia. Otherwise ASC-US.",
+      wrongHint: "Look again at nuclear membrane! The halo is partial and the nucleus is too bland for LSIL — call ASC-US."
+    },
+    {
+      id: 12,
+      caseLabel: "Case 12: Trichomoniasis Overcall",
+      history: "18F, vaginal discharge; many organisms with flagella in a swollen background.",
+      image: "",
+      imageDesc: "Pear-shaped organisms with eccentric nuclei, flagella; perinuclear halos in squamous cells with bland nuclei",
+      question: "Reporting?",
+      options: ["LSIL with koilocytosis","Negative for intraepithelial lesion — Trichomonas vaginalis present","ASC-US","HSIL"],
+      correct: 1,
+      explanation: "Trichomonads produce cytoplasmic halos in squamous cells that mimic koilocytes, but nuclei stay bland. The presence of organisms is reported under the general category of negative (with the organism noted, per Bethesda ancillary findings).",
+      teachingPoint: "Halo with bland nucleus + organisms = trichomonas, not LSIL.",
+      wrongHint: "Look again at nuclear membrane! Bland nuclei + flagellated organisms = trich, the halo is a red herring."
+    },
+    {
+      id: 13,
+      caseLabel: "Case 13: Fungal Elements",
+      history: "32F, curdy discharge, inflamed smear.",
+      image: "",
+      imageDesc: "Pseudohyphae and budding yeast over reactive squamous cells, acute inflammatory exudate",
+      question: "Correct interpretation?",
+      options: ["Negative for intraepithelial lesion — fungal organisms morphologically consistent with Candida","LSIL","ASC-H","HSIL"],
+      correct: 0,
+      explanation: "Candida induces reactive (inflammatory) changes — enlarged nuclei with nucleoli and halos — that should NOT be called LSIL. Pseudohyphae/budding yeast are reported as organisms under negative, with correlation if symptoms.",
+      teachingPoint: "Reactive halos + yeast = NILM with Candida. Do not upgrade to LSIL.",
+      wrongHint: "Look again at nuclear membrane! Nuclei are reactive but bland — these are Candida halos, not koilocytes."
+    },
+    {
+      id: 14,
+      caseLabel: "Case 14: The Orange Chapter",
+      history: "34F, routine screening; smear with hyperkeratosis.",
+      image: "",
+      imageDesc: "Small anucleate and pyknotic orangeophilic squames with dense cytoplasm, tiny pyknotic nuclei, low N:C",
+      question: "Interpretation?",
+      options: ["HSIL","Parakeratosis (negative)","ASC-H","LSIL"],
+      correct: 1,
+      explanation: "Parakeratotic cells are small, dense, orangeophilic cells with pyknotic (tiny, dark) nuclei — N:C is LOW. HSIL nuclei occupy most of the cell with irregular membranes and coarse chromatin. Marked nuclear atypia within parakeratotic cells would prompt ASC-H, but bland pyknosis is negative.",
+      teachingPoint: "Pyknotic tiny nucleus = parakeratosis (N:C low); nuclear-wasting cell = HSIL (N:C high).",
+      wrongHint: "Look again at nuclear membrane! Pyknotic tiny nucleus with dense cytoplasm = parakeratosis, N:C is low."
+    },
+    {
+      id: 15,
+      caseLabel: "Case 15: Not a Small-Cell Tumor",
+      history: "60F, atrophic smear; intense chronic inflammation.",
+      image: "",
+      imageDesc: "Dense aggregate of small lymphocytes with tingible-body macrophages on an atrophic background",
+      question: "Diagnosis?",
+      options: ["Small-cell carcinoma / lymphoma","Follicular cervicitis (benign)","HSIL","ASC-H"],
+      correct: 1,
+      explanation: "Follicular cervicitis: crowded clusters of mature small lymphocytes with intermixed large transformed lymphocytes and tingible-body macrophages, typical of chronic cervicitis in older women. Malignancy shows a monomorphic population with abnormal chromatin and lacks tingible-body macrophages.",
+      teachingPoint: "Seen tingible-body macrophages + mixed lymphocytes = follicular cervicitis, not lymphoma.",
+      wrongHint: "Look again at nuclear membrane! Mixed lymphocytes with tingible-body macrophages = follicular cervicitis."
+    },
+    {
+      id: 16,
+      caseLabel: "Case 16: Menopause Note",
+      history: "63F, postmenopausal bleed; scant small glandular clusters in atrophic smear.",
+      image: "",
+      imageDesc: "Scarce small endometrial cells with scant cytoplasm and bland nuclei on an atrophic background",
+      question: "Correct reporting?",
+      options: ["AGC-NOS","Endometrial adenocarcinoma","Negative — endometrial cells present (note for clinical correlation)","HSIL with glandular involvement"],
+      correct: 2,
+      explanation: "Per Bethesda, endometrial cells in a woman ≥45 years are reported as \"Endometrial cells present (negative for squamous intraepithelial lesion)\" with a note about clinical correlation — not as AGC. AGC should be reserved for truly atypical epithelia, not bland shed cells.",
+      teachingPoint: "Bland endometrial cells in ≥45 = reported with note; atypical ones = AGC/EMCA workup.",
+      wrongHint: "Look again at nuclear membrane! These nuclei are bland — report as endometrial cells present, not AGC."
+    },
+    {
+      id: 17,
+      caseLabel: "Case 17: The Tadpole Cell",
+      history: "41F, 20+ pack-year smoker, cervix ulcerated.",
+      image: "",
+      imageDesc: "Single tadpole and spindle cells with dense orangeophilic cytoplasm, pleomorphic hyperchromatic nuclei, background blood",
+      question: "Diagnosis?",
+      options: ["HSIL","Keratinizing squamous cell carcinoma","Parakeratosis","ASC-H"],
+      correct: 1,
+      explanation: "Keratinizing SCC: bizarre elongated (tadpole/spindle) cells with dense orangeophilic keratinized cytoplasm and enlarged pleomorphic hyperchromatic nuclei — cells that are too polymorphic for HSIL. True HSIL cells, even keratinized variants, are more uniform.",
+      teachingPoint: "Elongation + pleomorphism + orange cytoplasm + diathesis = keratinizing SCC, not HSIL.",
+      wrongHint: "Look again at nuclear membrane! Tadpole shape and marked pleomorphism = keratinizing SCC."
+    },
+    {
+      id: 18,
+      caseLabel: "Case 18: The Borderline Cluster",
+      history: "30F, HPV 16+, one crowded cluster of small cells; hard to be certain.",
+      image: "",
+      imageDesc: "Single tight cluster of crowded small cells with high N:C; nuclear features intermediate between LSIL and HSIL",
+      question: "Best interpretation?",
+      options: ["LSIL","ASC-H","HSIL","ASC-US"],
+      correct: 1,
+      explanation: "When a single quality cell or small cluster is clearly abnormal but not diagnostic of HSIL, ASC-H is the correct Bethesda category. It signals high-grade concern to the clinician (colposcopy) without overstating a definitive HSIL.",
+      teachingPoint: "Crowded, tiny, suspicious but not diagnostic of HSIL → ASC-H → colposcopy, not guessing.",
+      wrongHint: "Look again at nuclear membrane! Crowded small cells that worry you = ASC-H, not a guess of LSIL."
+    },
+    {
+      id: 19,
+      caseLabel: "Case 19: Reactive Endocervix",
+      history: "47F, pessary in place, moderate inflammation.",
+      image: "",
+      imageDesc: "Endocervical cells with nucleoli, streaming and preserved architecture; nuclei slightly enlarged but smooth, N:C preserved",
+      question: "Interpretation?",
+      options: ["AGC-NOS","Reactive endocervical cells (negative)","AIS","Adenocarcinoma"],
+      correct: 1,
+      explanation: "Reactive endocervical cells: preserved polarity and streaming sheets, smooth nuclear membranes, nucleoli, and a preserved N:C ratio. AIS/Adenocarcinoma show crowding, hyperchromasia, elongated nuclei, irregular membranes and loss of polarity.",
+      teachingPoint: "Smooth membranes + preserved N:C + mild nucleoli = reactive, not AGC.",
+      wrongHint: "Look again at nuclear membrane! Smooth borders and low N:C = reactive endocervical cells."
+    },
+    {
+      id: 20,
+      caseLabel: "Case 20: Invasion Signals",
+      history: "50F, HPV 16+, post-coital bleeding, cervix friable.",
+      image: "",
+      imageDesc: "Very crowded HSIL-like cells with tumor diathesis, keratin pearls, elongated weeping nuclei and bizarre shapes",
+      question: "Bethesda interpretation?",
+      options: ["HSIL","Squamous cell carcinoma, suspicious for invasion","ASC-H","LSIL"],
+      correct: 1,
+      explanation: "Features favoring invasion: tumor diathesis (necrotic/bloody debris), keratin pearls, markedly elongated 'weeping' nuclei, and highly pleomorphic cells with irregular shapes. When invasion is questioned but not certain, use 'suspicious for invasion' — imaging/clinical correlation is mandatory.",
+      teachingPoint: "Diathesis + weeping nuclei + pearls → suspicious for invasion; never just HSIL.",
+      wrongHint: "Look again at nuclear membrane! Diathesis and weeping nuclei push this to suspected invasion."
     }
   ]
 };
@@ -388,7 +583,7 @@ function drawCertificate(){
   ctx.beginPath(); ctx.moveTo(W/2-260,355); ctx.lineTo(W/2+260,355); ctx.stroke();
   ctx.fillStyle = "#5c6b7a"; ctx.font = "400 24px Segoe UI, Arial";
   ctx.fillText("has completed Quiz 1: Bethesda Battle — Cervical Cytology", W/2, 415);
-  ctx.fillText("Theme: Pitfalls in Daily Screening (5 cases)", W/2, 455);
+  ctx.fillText("Theme: Pitfalls in Daily Screening (20 cases)", W/2, 455);
   ctx.fillStyle = "#7c3aed"; ctx.font = "800 56px Segoe UI, Arial";
   ctx.fillText("Bethesda Accuracy: " + pct + "%", W/2, 545);
   ctx.fillStyle = "#1c2733"; ctx.font = "700 26px Segoe UI, Arial";
