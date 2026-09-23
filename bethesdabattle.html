@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bethesda Battle — Cervical Cytology Quiz | IAP-MD</title>
+<style>
+  :root{
+    --bg:#eef2f7; --card:#ffffff; --ink:#1c2733; --muted:#5c6b7a;
+    --accent:#7c3aed; --accent-2:#2563eb; --good:#059669; --bad:#dc2626;
+    --warn:#d97706; --line:#e3e9f0;
+  }
+  *{box-sizing:border-box}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;margin:0;color:var(--ink);background:var(--bg);line-height:1.45}
+  header{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;padding:18px 24px}
+  header h1{margin:0;font-size:1.35rem}
+  header p{margin:4px 0 0;font-size:.85rem;opacity:.9}
+  main{max-width:860px;margin:20px auto;padding:0 16px 40px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+  .badge{background:var(--accent);color:#fff;border-radius:999px;padding:1px 9px;font-size:.72rem;font-weight:600}
+  .note{font-size:.8rem;color:var(--muted)}
+  .btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:.9rem;font-weight:600;cursor:pointer;color:#fff;background:var(--accent);margin:4px 8px 0 0}
+  .btn:hover{filter:brightness(1.08)}
+  .btn.ghost{background:#dbe4f0;color:var(--ink)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .chip{font-size:.75rem;border-radius:999px;padding:3px 10px;background:#eef2f7;color:var(--ink)}
+  .chip.good{background:rgba(5,150,105,.12);color:var(--good)}
+  .chip.bad{background:rgba(220,38,38,.12);color:var(--bad)}
+  .qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .timerWrap{height:8px;background:#e8edf4;border-radius:999px;overflow:hidden;margin-bottom:14px}
+  .timerWrap > span{display:block;height:100%;width:100%;background:var(--accent);transition:width 1s linear}
+  .timerWrap.low > span{background:var(--bad)}
+  .timerTxt{font-size:.8rem;font-weight:700;color:var(--muted)}
+  .hist{font-size:.9rem;margin:0 0 8px}
+  .hist b{color:var(--accent)}
+  .imgBox{border:1px dashed var(--line);border-radius:10px;background:#f7f9fc;min-height:180px;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;margin:10px 0;color:var(--muted);font-size:.85rem;position:relative;overflow:hidden}
+  .imgBox img{max-width:100%;max-height:340px;display:block;border-radius:6px}
+  .qtext{font-size:1rem;font-weight:700;margin:12px 0 10px}
+  .opts{display:grid;gap:8px}
+  .optBtn{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 13px;font-size:.9rem;cursor:pointer;color:var(--ink);line-height:1.4}
+  .optBtn:hover:not(:disabled){border-color:var(--accent);background:#f7f4ff}
+  .optBtn .ltr{font-weight:800;color:var(--accent);flex-shrink:0}
+  .optBtn.correct{border-color:var(--good);background:rgba(5,150,105,.08)}
+  .optBtn.wrong{border-color:var(--bad);background:rgba(220,38,38,.07)}
+  .optBtn:disabled{cursor:default}
+  .feedback{border-radius:10px;padding:13px 14px;margin-top:14px;font-size:.87rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.35)}
+  .feedback.no{background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.3)}
+  .feedback .verdict{font-weight:800;margin-bottom:6px}
+  .feedback .tp{margin-top:8px;padding-top:8px;border-top:1px dashed rgba(0,0,0,.12);font-size:.82rem;color:var(--muted)}
+  .feedback .ref{margin-top:6px;font-size:.75rem;color:var(--muted)}
+  .modalBack{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+  .modalBack.show{display:flex}
+  .modal{background:#fff;border-radius:14px;padding:22px;max-width:420px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+  .modal h3{margin:0 0 8px;font-size:1.05rem;color:var(--bad)}
+  .modal p{margin:0 0 16px;font-size:.9rem;color:var(--ink)}
+  .scoreBig{font-size:2.6rem;font-weight:800;color:var(--accent);line-height:1.1;margin:6px 0 2px}
+  .scoreLabel{font-size:.85rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+  .breakdown{display:grid;gap:6px;margin-top:14px;text-align:left}
+  .bdRow{display:flex;justify-content:space-between;gap:8px;font-size:.82rem;padding:7px 10px;border-radius:8px;background:#f4f6f9}
+  .bdRow .st{font-weight:700}
+  .bdRow .st.ok{color:var(--good)}
+  .bdRow .st.no{color:var(--bad)}
+  .ctaRow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+  .nameInput{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:.9rem;margin-top:12px}
+  footer{max-width:860px;margin:0 auto;padding:0 16px 36px;font-size:.72rem;color:var(--muted);text-align:center}
+  .hidden{display:none!important}
+  @media(max-width:600px){
+    header{padding:14px}
+    header h1{font-size:1.05rem}
+    main{padding:0 12px 30px}
+    .card{padding:14px}
+    .scoreBig{font-size:2.1rem}
+    .btn{width:100%;text-align:center;margin:6px 0 0}
+    .ctaRow{flex-direction:column}
+  }
+  @media print{
+    body *{visibility:hidden}
+    #certCanvas,#certCanvas *{visibility:visible}
+    #certCanvas{position:fixed;left:0;top:0}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>QUIZ 1: Bethesda Battle — Cervical Cytology</h1>
+  <p>Theme: Pitfalls in Daily Screening &middot; IAP-MD Education Series</p>
+</header>
+
+<main>
+  <!-- INTRO -->
+  <section class="card" id="intro">
+    <h2 style="margin:0 0 8px;font-size:1.05rem">About this quiz <span class="badge">5 cases</span></h2>
+    <p class="note" style="font-size:.88rem;color:var(--ink)">
+      Five classic cervical cytology pitfalls: atrophy, immature metaplasia, small-cell HSIL,
+      endocervical AIS, and pseudokoilocytosis. One attempt per question, 30 seconds each.
+    </p>
+    <div class="meta">
+      <span class="chip">⏱ 30 sec / question</span>
+      <span class="chip">5 questions</span>
+      <span class="chip">Bethesda System, 3rd Ed (Nayar &amp; Wilbur)</span>
+    </div>
+    <label class="note" for="playerName" style="display:block;margin-top:14px">Your name (printed on certificate)</label>
+    <input class="nameInput" id="playerName" type="text" maxlength="60" placeholder="e.g. Dr. Jane Doe">
+    <div style="margin-top:14px">
+      <button class="btn" id="startBtn">Start Quiz</button>
+    </div>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="card hidden" id="qCard">
+    <div class="qhead">
+      <div><strong id="qCounter">Question 1 of 5</strong> <span class="badge" id="qCase">Case 1</span></div>
+      <div class="timerTxt" id="timerTxt">30s</div>
+    </div>
+    <div class="timerWrap" id="timerWrap"><span id="timerBar"></span></div>
+    <p class="hist" id="qHist"></p>
+    <div class="imgBox" id="qImg"></div>
+    <div class="qtext" id="qText"></div>
+    <div class="opts" id="qOpts"></div>
+    <div class="feedback" id="qFeedback"></div>
+    <div style="margin-top:14px">
+      <button class="btn hidden" id="nextBtn">Next question</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="card hidden" id="results">
+    <div style="text-align:center">
+      <div class="scoreLabel">Your Bethesda Accuracy</div>
+      <div class="scoreBig" id="scorePct">0%</div>
+      <div class="note" id="scoreWords"></div>
+    </div>
+    <div class="breakdown" id="breakdown"></div>
+    <div style="text-align:center">
+      <label class="nameInput" style="border:none;padding-top:16px;font-weight:600" for="certName">Certificate name</label>
+      <input class="nameInput" id="certName" type="text" maxlength="60" placeholder="Your name">
+      <div class="ctaRow">
+        <button class="btn" id="certBtn">Download Certificate</button>
+        <a class="btn ghost" id="forumBtn" href="https://iapmd.net" target="_blank" rel="noopener">Discuss this case in IAP-MD Forum</a>
+        <button class="btn ghost" id="retryBtn">Retry Quiz</button>
+      </div>
+    </div>
+    <canvas id="certCanvas" width="1100" height="780" style="display:none"></canvas>
+  </section>
+</main>
+
+<div class="modalBack" id="hintModal">
+  <div class="modal">
+    <h3 id="hintTitle">Not quite!</h3>
+    <p id="hintTxt"></p>
+    <button class="btn" id="hintOk">Got it — show explanation</button>
+  </div>
+</div>
+
+<footer>
+  Educational use only. Not a clinical decision tool. Reference: Nayar &amp; Wilbur, The Bethesda System for Reporting Cervical Cytology, 3rd Edition.
+</footer>
+
+<script>
+const QUIZ = {
+  title: "Bethesda Battle — Cervical Cytology",
+  theme: "Pitfalls in Daily Screening",
+  reference: "Nayar & Wilbur, The Bethesda System for Reporting Cervical Cytology, 3rd Ed.",
+  forumUrl: "https://iapmd.net",
+  secondsPerQuestion: 30,
+  questions: [
+    {
+      id: 1,
+      caseLabel: "Case 1: The Atrophic Mimic",
+      history: "62F, postmenopausal bleeding. Pap smear.",
+      image: "",
+      imageDesc: "Sheets of parabasal cells with high N:C, hyperchromatic nuclei, flat monolayer",
+      question: "What is your interpretation?",
+      options: ["HSIL","Atypical parabasal cells, atrophy","Squamous cell carcinoma","LSIL"],
+      correct: 1,
+      explanation: "Classic atrophy pitfall. Cells have high N:C but chromatin is vesicular, nuclei are uniform, flat sheet arrangement, dirty background absent. No irregular chromatin / mitosis of HSIL. Estrogen cream and repeat. Overcalling atrophy as HSIL is the #1 cause of false positive in postmenopausal women.",
+      teachingPoint: "Bethesda: Negative for intraepithelial lesion, atrophic pattern.",
+      wrongHint: "Look again at nuclear membrane! Uniform vesicular chromatin in flat sheets = atrophy, not HSIL."
+    },
+    {
+      id: 2,
+      caseLabel: "Case 2: The Metaplastic Confusion",
+      history: "28F, routine screening.",
+      image: "",
+      imageDesc: "Cohesive cluster of immature metaplastic cells with dense cytoplasm, prominent nucleoli, slightly irregular border",
+      question: "Next step?",
+      options: ["Call ASC-H","Call HSIL — metaplastic type","Negative — immature squamous metaplasia","Atypical glandular cells"],
+      correct: 2,
+      explanation: "Immature metaplasia has dense, almost metachromatic cytoplasm with rounded edges, vesicular nuclei with prominent nucleoli. Border is smooth. HSIL metaplastic type will have irregular chromatin, high N:C >75%, irregular membranes.",
+      teachingPoint: "Look for \"spider legs\" cytoplasm in metaplasia.",
+      wrongHint: "Look again at nuclear membrane! Vesicular chromatin + prominent nucleoli + smooth border = metaplasia."
+    },
+    {
+      id: 3,
+      caseLabel: "Case 3: The Real Deal — HSIL",
+      history: "35F, HPV 16 positive.",
+      image: "",
+      imageDesc: "Isolated small cells, very high N:C, irregular nuclear membrane, coarse chromatin",
+      question: "Bethesda diagnosis?",
+      options: ["LSIL","HSIL","ASC-US","Carcinoma"],
+      correct: 1,
+      explanation: "Small cell size (metaplastic type HSIL), but nucleus occupies almost entire cell, irregular membrane, coarse hyperchromatic chromatin. No cytoplasmic keratinization to call SCC.",
+      teachingPoint: "Pearl: On cytology, HSIL is often SMALLER than LSIL cells.",
+      wrongHint: "Look again at nuclear membrane! Coarse chromatin + irregular membrane in a tiny cell = HSIL, not LSIL."
+    },
+    {
+      id: 4,
+      caseLabel: "Case 4: Glandular Lesion — Don't Miss",
+      history: "45F, AGC on previous smear.",
+      image: "",
+      imageDesc: "3D cluster, rosettes, hyperchromatic nuclei, feathering, mitoses",
+      question: "Diagnosis?",
+      options: ["HSIL with endocervical involvement","Atypical endocervical cells, favor neoplastic","Endocervical adenocarcinoma in situ","Reactive endocervical cells"],
+      correct: 2,
+      explanation: "Feathering at edge of cluster + rosettes + elongated hyperchromatic nuclei + mitoses/apoptosis = AIS. Bethesda: Endocervical adenocarcinoma in situ. Critical action: Immediate colposcopy + endocervical assessment. This is never a screening repeat.",
+      teachingPoint: "Feathering + rosettes + mitoses = AIS → immediate colposcopy, never a repeat.",
+      wrongHint: "Look again at nuclear membrane! Feathering and rosettes with mitoses = AIS, not a glandular 'atypia'."
+    },
+    {
+      id: 5,
+      caseLabel: "Case 5: LSIL vs. The Mimic",
+      history: "24F, NILM x 2 years, now with koilocytes?",
+      image: "",
+      imageDesc: "Navicular cells, perinuclear halo but nuclei bland, glycogen",
+      question: "Diagnosis?",
+      options: ["LSIL with koilocytosis","Pseudokoilocytosis — glycogenated cells","HSIL","Herpes cytopathic effect"],
+      correct: 1,
+      explanation: "True koilocyte needs: 1. Well-defined sharp halo 2. Peripheral dense cytoplasm 3. Nuclear atypia (wrinkled, hyperchromatic). Navicular cells of pregnancy/luteal phase have yellow glycogen, ill-defined halo and bland nucleus.",
+      teachingPoint: "True koilocyte = sharp halo + dense rim + wrinkled hyperchromatic nucleus.",
+      wrongHint: "Look again at nuclear membrane! Bland nucleus in an ill-defined halo = pseudokoilocytosis."
+    }
+  ]
+};
+
+let idx = 0, score = 0, answered = false, timerId = null, timeLeft = 0, resultsLog = [];
+
+const $ = s => document.querySelector(s);
+
+function startQuiz(){
+  idx = 0; score = 0; resultsLog = [];
+  $("#intro").classList.add("hidden");
+  $("#results").classList.add("hidden");
+  $("#qCard").classList.remove("hidden");
+  renderQuestion();
+}
+
+function renderQuestion(){
+  answered = false;
+  const q = QUIZ.questions[idx];
+  $("#qCounter").textContent = "Question " + (idx+1) + " of " + QUIZ.questions.length;
+  $("#qCase").textContent = q.caseLabel.split(":")[0];
+  $("#qHist").innerHTML = "<b>History:</b> " + q.history;
+  const box = $("#qImg");
+  box.innerHTML = "";
+  if(q.image){
+    const img = document.createElement("img");
+    img.src = q.image; img.alt = q.imageDesc;
+    img.onerror = () => { box.innerHTML = slideFallback(q); };
+    box.appendChild(img);
+  } else {
+    box.innerHTML = slideFallback(q);
+  }
+  $("#qText").textContent = q.question;
+  const wrap = $("#qOpts");
+  wrap.innerHTML = "";
+  q.options.forEach((opt,i) => {
+    const b = document.createElement("button");
+    b.className = "optBtn";
+    b.innerHTML = '<span class="ltr">' + "ABCD"[i] + '</span><span>' + opt + '</span>';
+    b.addEventListener("click", () => choose(i));
+    wrap.appendChild(b);
+  });
+  const fb = $("#qFeedback");
+  fb.className = "feedback"; fb.innerHTML = "";
+  $("#nextBtn").classList.add("hidden");
+  startTimer();
+}
+
+function slideFallback(q){
+  return '<div style="max-width:520px"><div style="font-weight:700;color:var(--ink);margin-bottom:6px">[ Slide image — WSI slot ]</div>' +
+    q.imageDesc + '<div class="note" style="margin-top:8px">Set the <code>image</code> field in QUIZ.questions to your WSI link.</div></div>';
+}
+
+function startTimer(){
+  timeLeft = QUIZ.secondsPerQuestion;
+  const bar = $("#timerBar"), wrap = $("#timerWrap"), txt = $("#timerTxt");
+  wrap.classList.remove("low");
+  bar.style.width = "100%";
+  txt.textContent = timeLeft + "s";
+  clearInterval(timerId);
+  timerId = setInterval(() => {
+    timeLeft--;
+    txt.textContent = Math.max(timeLeft,0) + "s";
+    bar.style.width = (timeLeft / QUIZ.secondsPerQuestion * 100) + "%";
+    if(timeLeft <= 5) wrap.classList.add("low");
+    if(timeLeft <= 0){
+      clearInterval(timerId);
+      if(!answered) choose(-1);
+    }
+  }, 1000);
+}
+
+function choose(i){
+  if(answered) return;
+  answered = true;
+  clearInterval(timerId);
+  const q = QUIZ.questions[idx];
+  const ok = (i === q.correct);
+  if(ok) score++;
+  resultsLog.push({caseLabel:q.caseLabel, ok, chosen:i});
+  const btns = document.querySelectorAll("#qOpts .optBtn");
+  btns.forEach((b,bi) => {
+    b.disabled = true;
+    if(bi === q.correct) b.classList.add("correct");
+    if(bi === i && !ok) b.classList.add("wrong");
+  });
+  if(!ok){
+    $("#hintTxt").textContent = q.wrongHint;
+    $("#hintModal").classList.add("show");
+  } else {
+    showFeedback(ok, q);
+  }
+}
+
+function showFeedback(ok, q){
+  const fb = $("#qFeedback");
+  fb.className = "feedback show " + (ok ? "ok" : "no");
+  fb.innerHTML =
+    '<div class="verdict">' + (ok ? "✓ Correct — Answer: " + "ABCD"[q.correct] : "✗ Incorrect — Correct answer: " + "ABCD"[q.correct] + " — " + q.options[q.correct]) + '</div>' +
+    '<div>' + q.explanation + '</div>' +
+    '<div class="tp"><b>Teaching point:</b> ' + q.teachingPoint + '</div>' +
+    '<div class="ref">Reference: ' + QUIZ.reference + '</div>';
+  $("#nextBtn").textContent = (idx === QUIZ.questions.length - 1) ? "See results" : "Next question";
+  $("#nextBtn").classList.remove("hidden");
+}
+
+function next(){
+  idx++;
+  if(idx >= QUIZ.questions.length) showResults();
+  else renderQuestion();
+}
+
+function showResults(){
+  $("#qCard").classList.add("hidden");
+  $("#results").classList.remove("hidden");
+  const pct = Math.round(score / QUIZ.questions.length * 100);
+  $("#scorePct").textContent = pct + "%";
+  $("#scoreWords").textContent =
+    pct === 100 ? "Perfect — Bethesda expert!" :
+    pct >= 80  ? "Excellent spotting of mimics." :
+    pct >= 60  ? "Good — review the missed pitfalls." :
+                 "Review atrophy, metaplasia and koilocyte criteria.";
+  const bd = $("#breakdown");
+  bd.innerHTML = "";
+  resultsLog.forEach(r => {
+    const row = document.createElement("div");
+    row.className = "bdRow";
+    row.innerHTML = '<span>' + r.caseLabel + '</span><span class="st ' + (r.ok?"ok":"no") + '">' + (r.ok?"Correct":"Missed") + '</span>';
+    bd.appendChild(row);
+  });
+  const nameVal = ($("#playerName").value || "").trim();
+  $("#certName").value = nameVal;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function drawCertificate(){
+  const c = $("#certCanvas"), ctx = c.getContext("2d");
+  const W = c.width, H = c.height;
+  const name = ($("#certName").value || $("#playerName").value || "IAP-MD Participant").trim();
+  const pct = Math.round(score / QUIZ.questions.length * 100);
+  const g = ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,"#7c3aed"); g.addColorStop(1,"#2563eb");
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle = g; ctx.lineWidth = 14; ctx.strokeRect(18,18,W-36,H-36);
+  ctx.lineWidth = 2; ctx.strokeRect(34,34,W-68,H-68);
+  ctx.textAlign = "center"; ctx.fillStyle = "#7c3aed";
+  ctx.font = "700 26px Segoe UI, Arial"; ctx.fillText("IAP-MD  ·  Indian Academy of Pathology & Medical Diagnostics", W/2, 110);
+  ctx.fillStyle = "#1c2733"; ctx.font = "800 52px Segoe UI, Arial";
+  ctx.fillText("Certificate of Participation", W/2, 190);
+  ctx.fillStyle = "#5c6b7a"; ctx.font = "400 26px Segoe UI, Arial";
+  ctx.fillText("This certifies that", W/2, 260);
+  ctx.fillStyle = "#1c2733"; ctx.font = "800 44px Segoe UI, Arial";
+  ctx.fillText(name, W/2, 330);
+  ctx.strokeStyle = "#e3e9f0"; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(W/2-260,355); ctx.lineTo(W/2+260,355); ctx.stroke();
+  ctx.fillStyle = "#5c6b7a"; ctx.font = "400 24px Segoe UI, Arial";
+  ctx.fillText("has completed Quiz 1: Bethesda Battle — Cervical Cytology", W/2, 415);
+  ctx.fillText("Theme: Pitfalls in Daily Screening (5 cases)", W/2, 455);
+  ctx.fillStyle = "#7c3aed"; ctx.font = "800 56px Segoe UI, Arial";
+  ctx.fillText("Bethesda Accuracy: " + pct + "%", W/2, 545);
+  ctx.fillStyle = "#1c2733"; ctx.font = "700 26px Segoe UI, Arial";
+  ctx.fillText("Score: " + score + " / " + QUIZ.questions.length, W/2, 595);
+  ctx.fillStyle = "#5c6b7a"; ctx.font = "400 20px Segoe UI, Arial";
+  ctx.fillText("Reference: Nayar & Wilbur, The Bethesda System, 3rd Edition", W/2, 660);
+  const d = new Date();
+  ctx.fillText(d.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"}), W/2, 700);
+  ctx.fillStyle = "#5c6b7a"; ctx.font = "600 22px Segoe UI, Arial";
+  ctx.fillText("iapmd.net", W/2, 740);
+  const a = document.createElement("a");
+  a.download = "bethesda-battle-certificate.png";
+  a.href = c.toDataURL("image/png");
+  a.click();
+}
+
+$("#startBtn").addEventListener("click", startQuiz);
+$("#nextBtn").addEventListener("click", next);
+$("#hintOk").addEventListener("click", () => {
+  $("#hintModal").classList.remove("show");
+  showFeedback(false, QUIZ.questions[idx]);
+});
+$("#certBtn").addEventListener("click", drawCertificate);
+$("#retryBtn").addEventListener("click", () => {
+  $("#results").classList.add("hidden");
+  $("#intro").classList.remove("hidden");
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+$("#forumBtn").href = QUIZ.forumUrl;
+</script>
+</body>
+</html>
